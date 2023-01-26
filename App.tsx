@@ -9,14 +9,20 @@ import {
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NativeBaseProvider, StatusBar, Text, View } from 'native-base'
+import { CalendarBlank, ChartLineUp, House, User } from 'phosphor-react-native'
 
 import { Homepage } from './src/screens/Homepage'
 import { THEME } from './src/styles/theme'
 import { Loading } from './src/screens/Loading'
 import { Calendar } from './src/screens/Calendar'
 import { Settings } from './src/screens/Settings'
+import { createStackNavigator } from '@react-navigation/stack'
+import { NewRoutine } from './src/screens/NewRoutine'
+import { Routes } from './src/screens/Routes'
+import { Routine } from './src/screens/Routine'
 
 const Tab = createBottomTabNavigator()
+const RootStack = createStackNavigator()
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -39,26 +45,15 @@ export default function App() {
   return (
     <NativeBaseProvider theme={THEME}>
       <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={{
-            headerShown: false,
-            tabBarStyle: { backgroundColor: '#2200F2', height: 100 },
-            tabBarLabelStyle: {
-              color: 'white',
-              fontSize: 14,
-              fontFamily: 'Lexend_400Regular',
-            },
-          }}
-        >
-          <Tab.Screen
-            name="Home"
-            component={Homepage}
-            options={{ tabBarIcon: ({ color }) => '' }}
-          />
-          <Tab.Screen name="Calendário" component={Calendar} />
-          <Tab.Screen name="Stats" component={Calendar} />
-          <Tab.Screen name="Perfil" component={Settings} />
-        </Tab.Navigator>
+        <RootStack.Navigator screenOptions={{ headerShown: false }}>
+          <RootStack.Group>
+            <RootStack.Screen name="Routes" component={Routes} />
+            <RootStack.Screen name="Routine" component={Routine} />
+          </RootStack.Group>
+          <RootStack.Group screenOptions={{ presentation: 'modal' }}>
+            <RootStack.Screen name="NewRoutine" component={NewRoutine} />
+          </RootStack.Group>
+        </RootStack.Navigator>
       </NavigationContainer>
       <StatusBar barStyle={'dark-content'} />
     </NativeBaseProvider>

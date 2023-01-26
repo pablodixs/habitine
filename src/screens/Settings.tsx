@@ -1,5 +1,5 @@
 import { View, Container, Text, VStack, ScrollView } from 'native-base'
-import { Profile } from '../../components/Profile'
+import { Profile } from '../components/Profile'
 
 export function Settings() {
   return (
