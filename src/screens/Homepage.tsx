@@ -6,12 +6,15 @@ import {
   ScrollView,
   Box,
   View,
+  FlatList,
+  Center,
 } from 'native-base'
 import { Plus } from 'phosphor-react-native'
+import { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 
 import { TaskCard } from '../components/TaskCard'
-import { userRoutines } from '../utils/data'
+import { userRoutines, UserRoutinesProps } from '../utils/data'
 
 export function Homepage({ navigation }: any) {
   return (
@@ -62,22 +65,44 @@ export function Homepage({ navigation }: any) {
           <Text>SÁB</Text>
           <Text>DOM</Text>
         </HStack>
-        <ScrollView padding={4} height={'full'}>
-          {userRoutines.map((item) => {
-            return (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Routine', { id: item.id })}
-              >
-                <TaskCard
-                  routineName={item.routineName}
-                  time={item.time}
+        <VStack padding={4} height={'full'}>
+          <FlatList
+            data={userRoutines}
+            extraData={(item: UserRoutinesProps) => item.id}
+            ListEmptyComponent={() => {
+              return (
+                <Center alignItems={'center'}>
+                  <Text fontSize={'5xl'}>🏖️</Text>
+                  <Text
+                    fontFamily={'medium'}
+                    fontSize={'lg'}
+                    textAlign={'center'}
+                    color={'gray.700'}
+                    lineHeight={'25%'}
+                  >
+                    Você não tem nenhuma rotina programada
+                  </Text>
+                </Center>
+              )
+            }}
+            renderItem={({ item }) => {
+              return (
+                <TouchableOpacity
                   key={item.id}
-                  timeAmount={item.steps.length}
-                />
-              </TouchableOpacity>
-            )
-          })}
-        </ScrollView>
+                  onPress={() =>
+                    navigation.navigate('Routine', { id: item.id })
+                  }
+                >
+                  <TaskCard
+                    routineName={item.routineName}
+                    time={item.time}
+                    timeAmount={item.steps.length}
+                  />
+                </TouchableOpacity>
+              )
+            }}
+          ></FlatList>
+        </VStack>
       </VStack>
     </View>
   )

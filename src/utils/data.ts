@@ -11,6 +11,7 @@ export interface UserRoutinesProps {
   isFinished: boolean
   steps: StepsProps[]
   createdAt: string
+  days?: []
 }
 
 export const userRoutines: UserRoutinesProps[] = [

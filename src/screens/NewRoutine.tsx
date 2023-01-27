@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Center,
-  Container,
   HStack,
   ScrollView,
   Text,
@@ -23,7 +22,7 @@ const routines = [
 
 export function NewRoutine({ navigation }: any) {
   return (
-    <View padding={6} bgColor={'#fff'}>
+    <View flex={1} padding={6} bgColor={'#fff'}>
       <HStack justifyContent={'flex-end'}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Box
@@ -44,7 +43,7 @@ export function NewRoutine({ navigation }: any) {
           <Text
             color={'black.500'}
             fontSize={'4xl'}
-            letterSpacing={-0.5}
+            letterSpacing={-0.7}
             fontFamily={'bold'}
           >
             Nova rotina
@@ -65,6 +64,7 @@ export function NewRoutine({ navigation }: any) {
             background={'blue.500'}
             borderRadius={12}
             padding={3}
+            onPress={() => navigation.navigate('CreateRoutine')}
           >
             <Text fontSize={'md'} color={'#fff'} fontFamily={'medium'}>
               Rotina personalizada 📝

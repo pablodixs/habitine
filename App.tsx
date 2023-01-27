@@ -20,6 +20,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { NewRoutine } from './src/screens/NewRoutine'
 import { Routes } from './src/screens/Routes'
 import { Routine } from './src/screens/Routine'
+import { CreateRoutine } from './src/screens/CreateRoutine'
 
 const Tab = createBottomTabNavigator()
 const RootStack = createStackNavigator()
@@ -52,6 +53,7 @@ export default function App() {
           </RootStack.Group>
           <RootStack.Group screenOptions={{ presentation: 'modal' }}>
             <RootStack.Screen name="NewRoutine" component={NewRoutine} />
+            <RootStack.Screen name="CreateRoutine" component={CreateRoutine} />
           </RootStack.Group>
         </RootStack.Navigator>
       </NavigationContainer>

@@ -1,31 +1,27 @@
-import { Box, Button, Center, Container, Text, View, VStack } from 'native-base'
 import {
-  ArrowLeft,
-  ArrowRight,
-  Clock,
-  Pencil,
-  Play,
-  Trash,
-  X,
-} from 'phosphor-react-native'
+  Box,
+  Center,
+  Container,
+  FlatList,
+  Text,
+  View,
+  VStack,
+} from 'native-base'
+import { CaretLeft, Clock, PencilSimple, Trash } from 'phosphor-react-native'
 import { TouchableOpacity } from 'react-native'
-import { userRoutines, UserRoutinesProps } from '../utils/data'
+
+import { userRoutines } from '../utils/data'
+import { getFullTime, getMinutesAmount } from '../utils/timeFunctions'
 
 export function Routine({ navigation, route }: any) {
   const { id } = route.params
-
-  const data = new Date()
-  const converted = data.setHours(data.getHours() + 3)
 
   const routine = userRoutines.find((routine) => {
     return routine.id === id
   })
 
-  const totalMinutes = routine?.steps.reduce((total, item) => {
-    return total + item.timeAmount
-  }, 0)
-
-  const minutesAmount = Math.round((totalMinutes as number) / 60)
+  const minutesAmount = getMinutesAmount(routine!)
+  const fullTime = getFullTime(minutesAmount)
 
   return (
     <View height={'full'} px={4} backgroundColor={'#fff'}>
@@ -47,7 +43,7 @@ export function Routine({ navigation, route }: any) {
             fontFamily={'bold'}
             padding={2}
           >
-            <ArrowLeft size={20} weight="bold" />
+            <CaretLeft size={20} weight="bold" />
             <Text fontSize={'md'} fontFamily={'medium'} marginLeft={1}>
               Voltar
             </Text>
@@ -61,7 +57,7 @@ export function Routine({ navigation, route }: any) {
             borderRadius={12}
             borderColor={'gray.100'}
           >
-            <Pencil color="black" size={20} />
+            <PencilSimple color="black" size={20} weight="duotone" />
           </Box>
           <Box
             flexDir={'row'}
@@ -71,7 +67,7 @@ export function Routine({ navigation, route }: any) {
             borderColor={'red.200'}
             marginLeft={4}
           >
-            <Trash color="red" size={20} />
+            <Trash color="red" size={20} weight="duotone" />
           </Box>
         </Container>
       </Box>
@@ -96,38 +92,47 @@ export function Routine({ navigation, route }: any) {
           >
             {routine?.steps.length} etapas, cerca de {minutesAmount} minutos
           </Text>
-          {routine?.steps.map((step, index) => {
-            const minutes = Math.round(step.timeAmount / 60)
-            return (
-              <Box
-                key={index}
-                my={2}
-                flexDir={'row'}
-                justifyContent={'space-between'}
-                alignItems={'center'}
-                width="full"
-                borderWidth={2}
-                borderRadius={12}
-                borderColor={'gray.100'}
-                py={3}
-                px={2}
-              >
-                <Container flexDir={'row'} alignItems={'center'} flex={1}>
-                  <Text ml={2} fontSize={'md'} fontFamily="medium">
-                    • {step.name}
+          <FlatList
+            height={'full'}
+            data={routine?.steps}
+            renderItem={({ item, index }) => {
+              const minutes = Math.round(item.timeAmount / 60)
+              return (
+                <Box
+                  key={index}
+                  my={2}
+                  flexDir={'row'}
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                  width="full"
+                  borderWidth={2}
+                  borderRadius={12}
+                  borderColor={'gray.100'}
+                  py={3}
+                  px={2}
+                >
+                  <Container flexDir={'row'} alignItems={'center'} flex={1}>
+                    <Text
+                      ml={2}
+                      fontSize={'md'}
+                      fontFamily="medium"
+                      color={'gray.600'}
+                    >
+                      • {item.name}
+                    </Text>
+                  </Container>
+                  <Clock weight="bold" size={14} color="gray" />
+                  <Text ml={1} color={'gray.500'}>
+                    {minutes} {minutes > 1 ? 'minutos' : 'minuto'}
                   </Text>
-                </Container>
-                <Clock weight="bold" size={14} color="gray" />
-                <Text ml={1} color={'gray.500'}>
-                  {minutes} {minutes > 1 ? 'minutos' : 'minuto'}
-                </Text>
-              </Box>
-            )
-          })}
+                </Box>
+              )
+            }}
+          />
         </Box>
       </VStack>
       <Center
-        borderTopWidth={2}
+        borderTopWidth={1}
         borderTopColor={'gray.50'}
         safeArea
         position={'absolute'}
@@ -135,15 +140,16 @@ export function Routine({ navigation, route }: any) {
         right={0}
         left={0}
         px={4}
+        bgColor={'#fff'}
       >
-        <Text fontSize={'md'}>Se começar agora você terminará às</Text>
-        <Text fontSize={'xl'} fontFamily={'bold'} mb={4} color={'blue.500'}>
-          14h20 ({data.toString()})
+        <Text fontSize={'md'}>Se começar agora, você terminará às</Text>
+        <Text fontSize={'3xl'} fontFamily={'bold'} mb={4} color={'blue.500'}>
+          {String(fullTime)}
         </Text>
         <Box
           width={'full'}
           background={'blue.500'}
-          borderRadius={12}
+          borderRadius={20}
           padding={4}
           flexDirection={'row'}
           justifyContent={'center'}
@@ -157,7 +163,6 @@ export function Routine({ navigation, route }: any) {
           >
             Começar rotina
           </Text>
-          <Play color="#fff" weight="fill" />
         </Box>
       </Center>
     </View>
