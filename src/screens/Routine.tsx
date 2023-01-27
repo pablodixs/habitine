@@ -14,6 +14,9 @@ import { userRoutines, UserRoutinesProps } from '../utils/data'
 export function Routine({ navigation, route }: any) {
   const { id } = route.params
 
+  const data = new Date()
+  const converted = data.setHours(data.getHours() + 3)
+
   const routine = userRoutines.find((routine) => {
     return routine.id === id
   })
@@ -123,7 +126,20 @@ export function Routine({ navigation, route }: any) {
           })}
         </Box>
       </VStack>
-      <Center safeArea position={'absolute'} bottom={0} right={0} left={0} px={4}>
+      <Center
+        borderTopWidth={2}
+        borderTopColor={'gray.50'}
+        safeArea
+        position={'absolute'}
+        bottom={0}
+        right={0}
+        left={0}
+        px={4}
+      >
+        <Text fontSize={'md'}>Se começar agora você terminará às</Text>
+        <Text fontSize={'xl'} fontFamily={'bold'} mb={4} color={'blue.500'}>
+          14h20 ({data.toString()})
+        </Text>
         <Box
           width={'full'}
           background={'blue.500'}
@@ -133,10 +149,15 @@ export function Routine({ navigation, route }: any) {
           justifyContent={'center'}
           alignItems={'center'}
         >
-          <Text fontSize={'lg'} color={'#fff'} fontFamily={'medium'} marginRight={2}>
+          <Text
+            fontSize={'lg'}
+            color={'#fff'}
+            fontFamily={'medium'}
+            marginRight={2}
+          >
             Começar rotina
           </Text>
-          <Play color='#fff' weight='fill'/>
+          <Play color="#fff" weight="fill" />
         </Box>
       </Center>
     </View>

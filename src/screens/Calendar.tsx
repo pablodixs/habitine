@@ -1,16 +1,17 @@
 import { View, Container, Text, VStack } from 'native-base'
+import { Profile } from '../components/Profile'
 
 export function Calendar() {
   return (
-    <VStack bgColor={'#fff'}>
-      <Container pt={16} pb={4} px={4}>
-        <Text fontSize={'3xl'} letterSpacing={-0.5} fontFamily={'bold'}>
+    <View px={4} bgColor={'#fff'}>
+      <Container safeArea>
+        <Text fontSize={'3xl'} color={'black.500'} letterSpacing={-0.5} fontFamily={'bold'}>
           Calendário
         </Text>
       </Container>
       <VStack height={'full'} bgColor={'#fff'}>
-
+        <Profile />
       </VStack>
-    </VStack>
+    </View>
   )
 }
