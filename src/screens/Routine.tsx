@@ -11,7 +11,11 @@ import { CaretLeft, Clock, PencilSimple, Trash } from 'phosphor-react-native'
 import { TouchableOpacity } from 'react-native'
 
 import { userRoutines } from '../utils/data'
-import { getFullTime, getMinutesAmount } from '../utils/timeFunctions'
+import {
+  getFullTime,
+  getMinutesAmount,
+  getWeekDay,
+} from '../utils/timeFunctions'
 
 export function Routine({ navigation, route }: any) {
   const { id } = route.params
@@ -83,14 +87,14 @@ export function Routine({ navigation, route }: any) {
             {routine?.routineName}
           </Text>
         </Center>
-        <Box width={'full'} mt={6}>
+        <Box width={'full'} mt={4}>
           <Text
             textAlign={'center'}
             fontSize={'md'}
             fontFamily={'medium'}
             color={'gray.500'}
           >
-            {routine?.steps.length} etapas, cerca de {minutesAmount} minutos
+            {routine?.steps.length} etapas • Cerca de {minutesAmount} minutos
           </Text>
           <FlatList
             height={'full'}

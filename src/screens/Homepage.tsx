@@ -10,13 +10,22 @@ import {
   Center,
 } from 'native-base'
 import { Plus } from 'phosphor-react-native'
-import { useState } from 'react'
-import { TouchableOpacity } from 'react-native'
+import { useCallback, useState } from 'react'
+import { RefreshControl, TouchableOpacity } from 'react-native'
 
 import { TaskCard } from '../components/TaskCard'
 import { userRoutines, UserRoutinesProps } from '../utils/data'
 
 export function Homepage({ navigation }: any) {
+  const [isRefreshing, setIsRefreshing] = useState(false)
+
+  const onRefresh = useCallback(() => {
+    setIsRefreshing(true)
+    setTimeout(() => {
+      setIsRefreshing(false)
+    }, 500)
+  }, [])
+
   return (
     <View>
       <VStack safeArea bgColor={'#fff'}>
@@ -68,7 +77,10 @@ export function Homepage({ navigation }: any) {
         <VStack padding={4} height={'full'}>
           <FlatList
             data={userRoutines}
-            extraData={(item: UserRoutinesProps) => item.id}
+            extraData={(item: UserRoutinesProps) => item.routineName}
+            refreshControl={
+              <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+            }
             ListEmptyComponent={() => {
               return (
                 <Center alignItems={'center'}>
@@ -85,10 +97,10 @@ export function Homepage({ navigation }: any) {
                 </Center>
               )
             }}
-            renderItem={({ item }) => {
+            renderItem={({ item, index }) => {
               return (
                 <TouchableOpacity
-                  key={item.id}
+                  key={index}
                   onPress={() =>
                     navigation.navigate('Routine', { id: item.id })
                   }

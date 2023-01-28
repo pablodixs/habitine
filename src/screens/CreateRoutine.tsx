@@ -1,47 +1,74 @@
 import {
-  Alert,
   Box,
   Button,
   Center,
   Checkbox,
+  Container,
   HStack,
   Input,
   StatusBar,
-  Switch,
   Text,
   View,
   VStack,
 } from 'native-base'
-import { X } from 'phosphor-react-native'
+import { CaretRight, X } from 'phosphor-react-native'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { TouchableOpacity } from 'react-native'
-import { userRoutines } from '../utils/data'
+import { TouchableOpacity, Platform, YellowBox } from 'react-native'
+import uuid from 'react-native-uuid'
+import DateTimePicker from '@react-native-community/datetimepicker'
+import DateTimePickerModal from 'react-native-modal-datetime-picker'
 
+import { userRoutines } from '../utils/data'
+import moment from 'moment'
 
 export function CreateRoutine({ navigation }: any) {
   const { register, handleSubmit, setValue } = useForm()
-  const [days, setDays] = useState([])
+  const [days, setDays] = useState()
+  const [time, setTime] = useState()
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
+
+  const horario = moment(time).format('HH:mm')
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true)
+  }
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false)
+  }
+
+  const handleConfirm = (date: any) => {
+    setTime(date)
+    hideDatePicker()
+  }
 
   function handleSubmitForm(data: any) {
+    const routineName = data.routineName
+    const id = uuid.v4()
+    const timeString = time!
+
     const dataReceived = {
-      id: 3,
-      routineName: data.rotuineName,
-      time: '9h30',
+      id,
+      routineName,
+      time: timeString,
       type: 'Rotina',
       isFinished: false,
-      createdAt: '2023-01-26T14:45:14.518Z',
+      createdAt: new Date().toISOString(),
       steps: [
         { name: 'Arrumar a cama 🛏️', timeAmount: 60 },
-        { name: 'Fazer café ☕️', timeAmount: 300 },
         { name: 'Escovar os dentes 🪥', timeAmount: 180 },
+        { name: 'Fazer café ☕️', timeAmount: 300 },
+        { name: 'Fazer café ☕️', timeAmount: 300 },
+        { name: 'Fazer café ☕️', timeAmount: 300 },
       ],
+      daysOfWeek: days,
     }
+
+    console.log(days)
 
     userRoutines.push(dataReceived)
     navigation.goBack()
-
-    console.log(userRoutines)
   }
 
   return (
@@ -71,8 +98,8 @@ export function CreateRoutine({ navigation }: any) {
             Criando nova rotina
           </Text>
           <View width={'full'} mt={6}>
-            <Text color={'gray.500'} fontFamily={'medium'} mb={1}>
-              Nome da rotina
+            <Text fontSize="md" fontFamily={'medium'} color={'gray.500'} mb={1}>
+              Vamos dar um nome para sua nova rotina
             </Text>
             <Input
               focusOutlineColor={'blue.500'}
@@ -81,12 +108,19 @@ export function CreateRoutine({ navigation }: any) {
               py={3}
               borderRadius={12}
               fontSize={'md'}
+              fontFamily={'medium'}
               borderColor={'gray.100'}
               placeholder="Insira o nome da rotina"
               onChangeText={(text) => setValue('routineName', text)}
             />
-            <Text color={'gray.500'} fontFamily={'medium'} mb={1} mt={4}>
-              Dias da semana
+            <Text
+              fontSize="md"
+              fontFamily={'medium'}
+              color={'gray.500'}
+              mb={2}
+              mt={4}
+            >
+              Agora selecione os dias das semanas
             </Text>
             <Checkbox.Group
               flexDir={'row'}
@@ -97,94 +131,143 @@ export function CreateRoutine({ navigation }: any) {
               <Box justifyContent={'center'}>
                 <Checkbox
                   size={'lg'}
-                  value="seg"
+                  value="0"
                   borderRadius={8}
                   borderColor={'gray.100'}
                   p={1}
                   accessibilityLabel={'Segunda'}
                 />
-                <Text fontFamily={'bold'}>SEG</Text>
+                <Text fontFamily={'bold'} textAlign={'center'}>
+                  SEG
+                </Text>
               </Box>
               <Box justifyContent={'center'}>
                 <Checkbox
                   size={'lg'}
-                  value="ter"
+                  value="1"
                   borderRadius={8}
                   borderColor={'gray.100'}
                   p={1}
                   accessibilityLabel={'Terça'}
                 />
-                <Text fontFamily={'bold'}>TER</Text>
+                <Text fontFamily={'bold'} textAlign={'center'}>
+                  TER
+                </Text>
               </Box>
               <Box justifyContent={'center'}>
                 <Checkbox
                   size={'lg'}
-                  value="qua"
+                  value="2"
                   borderRadius={8}
                   borderColor={'gray.100'}
                   p={1}
                   accessibilityLabel={'Quarta'}
                 />
-                <Text fontFamily={'bold'}>QUA</Text>
+                <Text fontFamily={'bold'} textAlign={'center'}>
+                  QUA
+                </Text>
               </Box>
               <Box justifyContent={'center'}>
                 <Checkbox
                   size={'lg'}
-                  value="qui"
+                  value="3"
                   borderRadius={8}
                   borderColor={'gray.100'}
                   p={1}
                   accessibilityLabel={'Quinta'}
                 />
-                <Text fontFamily={'bold'}>QUI</Text>
+                <Text fontFamily={'bold'} textAlign={'center'}>
+                  QUI
+                </Text>
               </Box>
               <Box justifyContent={'center'}>
                 <Checkbox
                   size={'lg'}
-                  value="sex"
+                  value="4"
                   borderRadius={8}
                   borderColor={'gray.100'}
                   p={1}
                   accessibilityLabel={'Sexta'}
                 />
-                <Text fontFamily={'bold'}>SEX</Text>
+                <Text fontFamily={'bold'} textAlign={'center'}>
+                  SEX
+                </Text>
               </Box>
               <Box justifyContent={'center'}>
                 <Checkbox
                   size={'lg'}
-                  value="sab"
+                  value={'5'}
                   borderRadius={8}
                   borderColor={'gray.100'}
                   p={1}
                   accessibilityLabel={'Sábado'}
                 />
-                <Text fontFamily={'bold'}>SAB</Text>
+                <Text fontFamily={'bold'} textAlign={'center'}>
+                  SÁB
+                </Text>
               </Box>
               <Box justifyContent={'center'}>
                 <Checkbox
                   size={'lg'}
-                  value="dom"
+                  value="6"
                   borderRadius={8}
                   borderColor={'gray.100'}
                   p={1}
                   accessibilityLabel={'Domingo'}
                 />
-                <Text fontFamily={'bold'}>DOM</Text>
+                <Text fontFamily={'bold'} textAlign={'center'}>
+                  DOM
+                </Text>
               </Box>
             </Checkbox.Group>
-            <Button
-              onPress={handleSubmit(handleSubmitForm)}
-              borderRadius={12}
-              p={4}
-              bgColor={'blue.500'}
-            >
-              <Text fontFamily={'medium'} color={'#fff'} fontSize="md">
-                Criar rotina
-              </Text>
-            </Button>
+            <TouchableOpacity onPress={showDatePicker}>
+              <Box mt={4}>
+                <Text fontSize="md" fontFamily={'medium'} color={'gray.500'}>
+                  Agora um horário para começar
+                </Text>
+                <Box flexDir={'row'} justifyContent={'space-between'} alignItems={'center'}>
+                  <Text fontFamily={'bold'} fontSize={'xl'} color={'blue.500'}>
+                    {horario}
+                  </Text>
+                  <CaretRight weight='bold' color='#064bb4'/>
+                </Box>
+              </Box>
+            </TouchableOpacity>
+            <DateTimePickerModal
+              buttonTextColorIOS={'#99bbff'}
+              isVisible={isDatePickerVisible}
+              mode="time"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+              cancelTextIOS={'Cancelar'}
+              confirmTextIOS={'Confirmar'}
+              pickerContainerStyleIOS={{ backgroundColor: '#064bb4' }}
+            />
           </View>
         </Center>
       </VStack>
+      <Box
+        position="absolute"
+        bottom={0}
+        left={0}
+        right={0}
+        safeArea
+        px={4}
+        justifyContent="center"
+        alignItems={'center'}
+      >
+        <Button
+          onPress={handleSubmit(handleSubmitForm)}
+          borderRadius={12}
+          p={4}
+          bgColor={'blue.500'}
+          width={'full'}
+        >
+          <Text fontFamily={'medium'} color={'#fff'} fontSize="md">
+            Criar rotina
+          </Text>
+        </Button>
+      </Box>
       <StatusBar barStyle={'light-content'} />
     </View>
   )

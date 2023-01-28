@@ -4,21 +4,21 @@ interface StepsProps {
 }
 
 export interface UserRoutinesProps {
-  id: number
+  id: string | number[]
   routineName: string
   time: string
   type: string
   isFinished: boolean
   steps: StepsProps[]
   createdAt: string
-  days?: []
+  daysOfWeek: any
 }
 
 export const userRoutines: UserRoutinesProps[] = [
   {
-    id: 1,
+    id: '1',
     routineName: 'mourning routine 🌅',
-    time: '9h30',
+    time: '2023-01-27T17:53:27.000Z',
     type: 'Rotina',
     isFinished: false,
     createdAt: '2023-01-26T14:45:14.518Z',
@@ -27,11 +27,12 @@ export const userRoutines: UserRoutinesProps[] = [
       { name: 'Fazer café ☕️', timeAmount: 300 },
       { name: 'Escovar os dentes 🪥', timeAmount: 180 },
     ],
+    daysOfWeek: [],
   },
   {
-    id: 2,
+    id: '2',
     routineName: 'evening routine 😴',
-    time: '22h50',
+    time: '2023-01-27T17:53:27.000Z',
     type: 'Rotina',
     isFinished: false,
     createdAt: '2023-01-26T14:45:14.518Z',
@@ -41,5 +42,6 @@ export const userRoutines: UserRoutinesProps[] = [
       { name: 'Ler um livro', timeAmount: 300 },
       { name: 'meditar', timeAmount: 900 },
     ],
+    daysOfWeek: [],
   },
 ]

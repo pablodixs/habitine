@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { CalendarBlank, ChartLineUp, House, User } from 'phosphor-react-native'
+import { CalendarBlank, ChartLineUp, House, List, Rows, User } from 'phosphor-react-native'
 import { Calendar } from './Calendar'
 import { Homepage } from './Homepage'
 import { Settings } from './Settings'
@@ -11,7 +11,7 @@ export function Routes() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: { backgroundColor: '#353CD9', height: 100 },
+        tabBarStyle: { backgroundColor: '#064bb4', height: 100 },
         tabBarLabelStyle: {
           color: '#99bbff',
           fontSize: 12,
@@ -31,11 +31,11 @@ export function Routes() {
         }}
       />
       <Tab.Screen
-        name="Calendário"
+        name="Timeline"
         component={Calendar}
         options={{
           tabBarIcon: ({ color }) => (
-            <CalendarBlank color={color} weight="bold" />
+            <List color={color} weight="bold" />
           ),
         }}
       />
