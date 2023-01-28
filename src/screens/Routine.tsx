@@ -3,22 +3,35 @@ import {
   Center,
   Container,
   FlatList,
+  Modal,
   Text,
   View,
   VStack,
 } from 'native-base'
-import { CaretLeft, Clock, PencilSimple, Trash } from 'phosphor-react-native'
+import {
+  CaretLeft,
+  Clock,
+  PencilSimple,
+  Trash,
+  Warning,
+  XCircle,
+} from 'phosphor-react-native'
 import { TouchableOpacity } from 'react-native'
+import { useState } from 'react'
 
 import { userRoutines } from '../utils/data'
 import {
   getFullTime,
   getMinutesAmount,
-  getWeekDay,
-} from '../utils/timeFunctions'
+  handleDeleteRoutine,
+} from '../utils/geralFunctions'
+import { DangerButton } from '../components/DangerButton'
+import { MenuButton } from '../components/MenuButton'
 
 export function Routine({ navigation, route }: any) {
   const { id } = route.params
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const routine = userRoutines.find((routine) => {
     return routine.id === id
@@ -63,16 +76,18 @@ export function Routine({ navigation, route }: any) {
           >
             <PencilSimple color="black" size={20} weight="duotone" />
           </Box>
-          <Box
-            flexDir={'row'}
-            padding={2}
-            borderWidth={2}
-            borderRadius={12}
-            borderColor={'red.200'}
-            marginLeft={4}
-          >
-            <Trash color="red" size={20} weight="duotone" />
-          </Box>
+          <TouchableOpacity onPress={() => setIsModalOpen(true)}>
+            <Box
+              flexDir={'row'}
+              padding={2}
+              borderWidth={2}
+              borderRadius={12}
+              borderColor={'red.200'}
+              marginLeft={4}
+            >
+              <Trash color="red" size={20} weight="duotone" />
+            </Box>
+          </TouchableOpacity>
         </Container>
       </Box>
       <VStack>
@@ -169,6 +184,81 @@ export function Routine({ navigation, route }: any) {
           </Text>
         </Box>
       </Center>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        animationPreset="slide"
+        justifyContent={'flex-end'}
+        width={'full'}
+      >
+        <Modal.Content width={'full'} p={4} borderRadius={24}>
+          <Modal.CloseButton
+            borderWidth={2}
+            borderRadius={12}
+            borderColor={'gray.100'}
+            color={'black'}
+            fontFamily={'bold'}
+            padding={2}
+            m={2}
+            backgroundColor={'#fff'}
+          />
+          <Modal.Body safeArea>
+            <Center>
+              <Warning weight="duotone" size={42} color="red" />
+              <Text
+                textAlign={'center'}
+                fontFamily="medium"
+                color="black.500"
+                fontSize={'lg'}
+                mt={2}
+              >
+                Tem certeza que deseja excluir sua rotina?
+              </Text>
+            </Center>
+
+            <Text
+              fontFamily={'medium'}
+              fontSize={'2xl'}
+              mb={4}
+              color="black.500"
+              letterSpacing={-0.75}
+            ></Text>
+            <TouchableOpacity
+              onPress={() => {
+                handleDeleteRoutine(id, userRoutines)
+                setIsModalOpen(false)
+                navigation.goBack()
+              }}
+            >
+              <DangerButton>
+                <Trash color="red" weight="duotone" />
+                <Text
+                  ml={2}
+                  fontSize={'md'}
+                  fontFamily={'medium'}
+                  color="red.500"
+                >
+                  Sim, excluir "{routine?.routineName}"
+                </Text>
+              </DangerButton>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setIsModalOpen(false)}>
+              <MenuButton>
+                <XCircle weight="duotone" />
+                <Text
+                  fontSize={'md'}
+                  fontFamily={'medium'}
+                  color={'black.500'}
+                  textAlign="center"
+                  ml={2}
+                >
+                  Cancelar
+                </Text>
+              </MenuButton>
+            </TouchableOpacity>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
     </View>
   )
 }

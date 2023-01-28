@@ -3,21 +3,37 @@ import {
   Text,
   Container,
   HStack,
-  ScrollView,
   Box,
   View,
   FlatList,
   Center,
+  Progress,
+  Modal,
 } from 'native-base'
-import { Plus } from 'phosphor-react-native'
-import { useCallback, useState } from 'react'
+import { PlusCircle } from 'phosphor-react-native'
+import { useCallback, useState, useEffect } from 'react'
 import { RefreshControl, TouchableOpacity } from 'react-native'
 
 import { TaskCard } from '../components/TaskCard'
 import { userRoutines, UserRoutinesProps } from '../utils/data'
+import {
+  countRoutinesDone,
+  orderRoutineByFinished,
+} from '../utils/geralFunctions'
 
 export function Homepage({ navigation }: any) {
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [data, setData] = useState<UserRoutinesProps[]>([])
+
+  const sortedRoutines = orderRoutineByFinished(userRoutines)
+  const countRoutines = countRoutinesDone(userRoutines)
+  const countAllRoutines = userRoutines.length
+
+  const routinesDifference = countAllRoutines === countRoutines
+
+  useEffect(() => {
+    setData(sortedRoutines)
+  }, [])
 
   const onRefresh = useCallback(() => {
     setIsRefreshing(true)
@@ -27,11 +43,12 @@ export function Homepage({ navigation }: any) {
   }, [])
 
   return (
-    <View>
-      <VStack safeArea bgColor={'#fff'}>
+    <View bgColor={'#fff'}>
+      <VStack safeArea>
         <HStack
           pb={4}
           px={4}
+          py={3}
           justifyContent={'space-between'}
           alignItems={'center'}
         >
@@ -41,23 +58,18 @@ export function Homepage({ navigation }: any) {
           <TouchableOpacity onPress={() => navigation.navigate('NewRoutine')}>
             <Box
               borderWidth={2}
-              borderRadius={12}
               borderColor={'gray.100'}
+              borderRadius={12}
               padding={2}
               flexDirection={'row'}
               alignItems={'center'}
             >
-              <Plus size={16} weight="bold" />
+              <PlusCircle size={20} />
               <Text marginLeft={2}>Nova rotina</Text>
             </Box>
           </TouchableOpacity>
         </HStack>
-        <HStack
-          px={4}
-          pb={2}
-          justifyContent={'space-between'}
-          alignItems={'center'}
-        >
+        <HStack px={4} justifyContent={'space-between'} alignItems={'center'}>
           <Text>SEG</Text>
           <Container
             backgroundColor={'blue.500'}
@@ -74,10 +86,30 @@ export function Homepage({ navigation }: any) {
           <Text>SÁB</Text>
           <Text>DOM</Text>
         </HStack>
-        <VStack padding={4} height={'full'}>
+        <View px={4} py={4}>
+          <Progress
+            value={countRoutines}
+            max={countAllRoutines}
+            bg={'gray.50'}
+            _filledTrack={{
+              bg: 'blue.500',
+            }}
+          />
+          {!(countRoutines === 0) && routinesDifference && (
+            <Center my={2}>
+              <Text fontSize={'5xl'}>😎</Text>
+              <Text fontSize={'2xl'} fontFamily={'bold'} color={'blue.500'}>
+                É isso aí!
+              </Text>
+              <Text fontSize={'md'} fontFamily={'medium'}>
+                Você concluiu todas as rotinas do dia
+              </Text>
+            </Center>
+          )}
+        </View>
+        <VStack px={4} height={'full'}>
           <FlatList
-            data={userRoutines}
-            extraData={(item: UserRoutinesProps) => item.routineName}
+            data={data}
             refreshControl={
               <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
             }
@@ -99,18 +131,15 @@ export function Homepage({ navigation }: any) {
             }}
             renderItem={({ item, index }) => {
               return (
-                <TouchableOpacity
+                <TaskCard
                   key={index}
-                  onPress={() =>
-                    navigation.navigate('Routine', { id: item.id })
-                  }
-                >
-                  <TaskCard
-                    routineName={item.routineName}
-                    time={item.time}
-                    timeAmount={item.steps.length}
-                  />
-                </TouchableOpacity>
+                  routineName={item.routineName}
+                  time={item.time}
+                  timeAmount={item.steps.length}
+                  isFinished={item.isFinished}
+                  navigation={navigation}
+                  id={item.id}
+                />
               )
             }}
           ></FlatList>
