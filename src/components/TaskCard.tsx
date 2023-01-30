@@ -1,22 +1,16 @@
 import moment from 'moment'
-import { Text, Box, Center, Container, View, ZStack, Modal } from 'native-base'
-import {
-  CaretDown,
-  Check,
-  CheckCircle,
-  Trash,
-  X,
-  XCircle,
-} from 'phosphor-react-native'
+import { Text, Box, Container, View, Modal } from 'native-base'
+import { CheckCircle, Trash, XCircle } from 'phosphor-react-native'
 import { useState } from 'react'
-import { RefreshControl, TouchableOpacity } from 'react-native'
-import { userRoutines, UserRoutinesProps } from '../utils/data'
+import { TouchableOpacity } from 'react-native'
+
+import { userRoutines } from '../utils/data'
+import { DangerButton } from './DangerButton'
+import { MenuButton } from './MenuButton'
 import {
   handleDeleteRoutine,
   handleMarkAsFinished,
 } from '../utils/geralFunctions'
-import { DangerButton } from './DangerButton'
-import { MenuButton } from './MenuButton'
 
 interface TaskCardProps {
   navigation?: any
@@ -36,6 +30,7 @@ export function TaskCard({
   navigation,
 }: TaskCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
+
   const horario = moment(time).format('HH:mm')
 
   return (
@@ -96,7 +91,12 @@ export function TaskCard({
           justifyContent={'flex-end'}
           width={'full'}
         >
-          <Modal.Content width={'full'} p={4} borderRadius={24}>
+          <Modal.Content
+            width={'full'}
+            p={4}
+            borderTopRadius={12}
+            borderBottomRadius={0}
+          >
             <Modal.CloseButton
               borderWidth={2}
               borderRadius={12}

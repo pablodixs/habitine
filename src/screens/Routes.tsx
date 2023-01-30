@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { CalendarBlank, ChartLineUp, House, List, Rows, User } from 'phosphor-react-native'
+import { ChartLineUp, House, List, User } from 'phosphor-react-native'
+
 import { Calendar } from './Calendar'
 import { Homepage } from './Homepage'
 import { Settings } from './Settings'
@@ -11,7 +12,7 @@ export function Routes() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: { backgroundColor: '#064bb4', height: 100 },
+        tabBarStyle: { backgroundColor: '#064bb4', borderTopWidth: 0},
         tabBarLabelStyle: {
           color: '#99bbff',
           fontSize: 12,
@@ -27,7 +28,7 @@ export function Routes() {
         name="Home"
         component={Homepage}
         options={{
-          tabBarIcon: ({ color }) => <House color={color} weight="bold" />,
+          tabBarIcon: ({ color }) => <House color={color} weight="duotone" />,
         }}
       />
       <Tab.Screen
@@ -35,7 +36,7 @@ export function Routes() {
         component={Calendar}
         options={{
           tabBarIcon: ({ color }) => (
-            <List color={color} weight="bold" />
+            <List color={color} weight="duotone"  />
           ),
         }}
       />
@@ -44,7 +45,7 @@ export function Routes() {
         component={Calendar}
         options={{
           tabBarIcon: ({ color }) => (
-            <ChartLineUp color={color} weight="bold" />
+            <ChartLineUp color={color} weight="duotone"  />
           ),
         }}
       />
@@ -53,7 +54,7 @@ export function Routes() {
         component={Settings}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <User color={color} weight="bold" size={size} />
+            <User color={color} weight="duotone"  size={size} />
           ),
         }}
       />

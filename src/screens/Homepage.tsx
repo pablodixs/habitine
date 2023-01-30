@@ -8,7 +8,6 @@ import {
   FlatList,
   Center,
   Progress,
-  Modal,
 } from 'native-base'
 import { PlusCircle } from 'phosphor-react-native'
 import { useCallback, useState, useEffect } from 'react'
@@ -20,6 +19,7 @@ import {
   countRoutinesDone,
   orderRoutineByFinished,
 } from '../utils/geralFunctions'
+
 
 export function Homepage({ navigation }: any) {
   const [isRefreshing, setIsRefreshing] = useState(false)
